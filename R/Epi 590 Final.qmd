@@ -1,0 +1,60 @@
+---
+title: "EPI 590 Final"
+format: html
+---
+
+```{r}
+#| echo: false
+#| message: false
+here::here("data","wc_matches.csv")
+
+matches <- read.csv(here::here("data", "wc_matches.csv"))
+
+library(gtsummary)
+library(dplyr)
+
+
+matches <- rename(matches, home = team1, away = team2)
+matches <- matches %>% mutate(winner = ifelse( score1 > score2, 1, 0))
+```
+```{r}
+#| label: tbl-one
+#| tbl-cap: "Descriptive statistics"
+#| output-location: slide
+table1 <- tbl_summary(
+	matches,
+	include = c(prob1, prob2, xg1, xg2, spi1, spi2),
+	label = list(
+		prob1 ~ "Probability of Home Win",
+		prob2 ~ "Probability of Away Win",
+		xg1 ~ "Home Team Expected Goals",
+		xg2 ~ "Away Team Expected Goals",
+		spi1 ~ "Home Team Soccer Power Index",
+		spi2 ~ "Away Team Soccer Power Index"
+	))
+table1
+```
+@tbl-one contains descriptive statistics on the 64 games played. 
+```{r}
+tbl_uvregression(
+	matches,
+	y = winner,
+	include = c(prob1, prob2, xg1, xg2, spi1, spi2),
+						method =glm)
+```
+
+```{r}
+#| echo: false
+expected_goals <- matches$xg2
+```
+```{r}
+#| label: fig-hist
+#| fig-cap: "Away Team Expected Goals"
+hist1 <- hist(expected_goals)
+```
+```{r}
+stats <- list(n = nrow(matches),
+							mean_xg = mean(matches$xg2))
+```
+@fig-hist shows a distribution of the expected goals for away teams.
+Among the away teams, there were `r stats$n` teams and an average of `r stats$mean_xg` expected goals. 
