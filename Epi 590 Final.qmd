@@ -43,6 +43,7 @@ regression <- tbl_uvregression(
 	y = winner,
 	include = c(prob1, prob2, xg1, xg2, spi1, spi2),
 						method =glm)
+regression
 inline_text(regression, variable = "prob1")
 ```
 
