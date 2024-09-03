@@ -2,7 +2,7 @@
 title: "EPI 590 Final"
 format: html
 ---
-
+This data presents information on the 2022 World Cup predictions made by FiveThirtyEight. This data allowed them to make predictions on which teams would advance from the group stage using metrics like expected goals and Soccer Power Index.
 ```{r}
 #| echo: false
 #| message: false
@@ -18,6 +18,7 @@ matches <- rename(matches, home = team1, away = team2)
 matches <- matches %>% mutate(winner = ifelse( score1 > score2, 1, 0))
 ```
 ```{r}
+#| echo: false
 #| label: tbl-one
 #| tbl-cap: "Descriptive statistics"
 #| output-location: slide
@@ -36,11 +37,13 @@ table1
 ```
 @tbl-one contains descriptive statistics on the 64 games played. 
 ```{r}
-tbl_uvregression(
+#| echo: false
+regression <- tbl_uvregression(
 	matches,
 	y = winner,
 	include = c(prob1, prob2, xg1, xg2, spi1, spi2),
 						method =glm)
+inline_text(regression, variable = "prob1")
 ```
 
 ```{r}
@@ -48,11 +51,13 @@ tbl_uvregression(
 expected_goals <- matches$xg2
 ```
 ```{r}
+#| echo: false
 #| label: fig-hist
 #| fig-cap: "Away Team Expected Goals"
 hist1 <- hist(expected_goals)
 ```
 ```{r}
+#| echo: false
 stats <- list(n = nrow(matches),
 							mean_xg = mean(matches$xg2))
 ```
