@@ -55,6 +55,7 @@ expected_goals <- matches$xg2
 #| label: fig-hist
 #| fig-cap: "Away Team Expected Goals"
 hist1 <- hist(expected_goals)
+
 ```
 ```{r}
 #| echo: false
@@ -63,3 +64,13 @@ stats <- list(n = nrow(matches),
 ```
 @fig-hist shows a distribution of the expected goals for away teams.
 Among the away teams, there were `r stats$n` teams and an average of `r stats$mean_xg` expected goals. 
+```{r}
+#| echo: false
+mean_goals <- function(x){
+	n <- length(x)
+	mean_val <- sum(x) / n
+	return(mean_val)
+}
+x <- c(matches$score1, matches$score2)
+mean_goals(x)
+```
